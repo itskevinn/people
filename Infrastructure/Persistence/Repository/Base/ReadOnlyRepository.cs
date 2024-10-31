@@ -1,28 +1,41 @@
 using System.Linq.Expressions;
 using Domain.Entity;
 using Domain.Ports.Base;
+using Infrastructure.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence.Base;
+namespace Infrastructure.Persistence.Repository.Base;
 
-public class ReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey> where TEntity : EntityBase<TKey>
+public class ReadOnlyRepository<TEntity, TKey>(PeopleContext peopleContext) : IReadOnlyRepository<TEntity, TKey>
+    where TEntity : EntityBase<TKey>
 {
-    public Task<IQueryable<TEntity>> GetAsync()
+    private readonly DbSet<TEntity> _dbSet = peopleContext.Set<TEntity>();
+
+
+    public async Task<IQueryable<TEntity>> GetAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
-        throw new NotImplementedException();
+        IQueryable<TEntity> queryable = _dbSet;
+        if (filter != null)
+        {
+            queryable = queryable.Where(filter);
+        }
+
+        return await Task.FromResult(queryable);
     }
 
-    public Task<IQueryable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter)
+    public async Task<TEntity?> FindByAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
-        throw new NotImplementedException();
+        IQueryable<TEntity> queryable = _dbSet;
+        if (filter != null)
+        {
+            queryable = queryable.Where(filter);
+        }
+
+        return await Task.FromResult(queryable.First());
     }
 
-    public Task<TEntity> FindByAsync(Expression<Func<TEntity, bool>> filter)
+    public async Task<TEntity?> FindAsync(TKey key)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<TEntity> FindAsync(TKey key)
-    {
-        throw new NotImplementedException();
+        return await _dbSet.FindAsync(key);
     }
 }

@@ -1,4 +1,4 @@
-namespace Domain.Entity;
+namespace Domain.Entity.Base;
 
 public class AuditableEntity<T> : EntityBase<T>, IAuditableEntity<T>
 {

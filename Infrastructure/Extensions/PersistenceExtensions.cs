@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Extensions;
 
-public static class PersistenceExtension
+public static class PersistenceExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection svc)
     {

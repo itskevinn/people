@@ -1,6 +1,3 @@
 namespace Domain.Exceptions;
 
-public class AlreadyExistsException
-{
-    
-}
+public class AlreadyExistsException(string message) : Exception(message);
